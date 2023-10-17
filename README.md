@@ -1,14 +1,10 @@
-Los Laboratorios Apertura, una importante empresa de
-investigación científica mixta, nos ha pedido un programa para
-su nuevo sistema de estacionamiento cuántico.
-El estacionamiento está dividido en 2 partes, una tiene un
-espacio finito de exactamente 12 posiciones, donde las
-posiciones 3, 7 y 12 están reservadas para VIP (personas de alta importancia) y solo
-pueden ocuparse por vehículos cuyos dueños sean VIP.
-El otro, nos han comentado, tiene posiciones infinitas y puede guardar N vehiculos, sin
-embargo, las posiciones de este estacionamiento infinito no son simétricas y pueden tener
-diferentes tamaños. Esos tamaños pueden ser mini, standard o max, donde un vehículo
-más pequeño puede entrar en un espacio más grande pero no es ideal.
+Los Laboratorios Apertura, una importante empresa de investigación científica mixta, nos ha pedido un programa para su nuevo sistema de estacionamiento cuántico.
+
+El estacionamiento está dividido en 2 partes, una tiene un espacio finito de exactamente 12 posiciones, donde las posiciones 3, 7 y 12 están reservadas para VIP (personas de alta importancia) y solo pueden ocuparse por vehículos cuyos dueños sean VIP. 
+
+El otro, nos han comentado, tiene posiciones infinitas y puede guardar N vehiculos, sin embargo, las posiciones de este estacionamiento infinito no son simétricas y pueden tener
+diferentes tamaños. Esos tamaños pueden ser mini, standard o max, donde un vehículo más pequeño puede entrar en un espacio más grande pero no es ideal.
+
 Se nos pide que intentemos primero llenar el estacionamiento regular antes de ocupar el estacionamiento cuántico, pero no hace falta mover los vehículos una vez estacionados.
 
 De los vehículos sabemos sus atributos básicos, como su modelo, su dueño, su matrícula, y sus dimensiones guardadas por ancho y largo.
