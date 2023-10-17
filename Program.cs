@@ -15,10 +15,7 @@ namespace TP_2._1
             Estacionamiento estacionamientoFinito = new Estacionamiento(12);
             Estacionamiento estacionamientoInfinito = new Estacionamiento();
 
-            int estaFinito = 0;
-            int estaInfi = 0;
-
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 15; i++)
             {
                 vehiculos.Add(new Vehiculo());
             }
@@ -27,28 +24,9 @@ namespace TP_2._1
             {
                 if (!estacionamientoFinito.EstacionarVehiculo(vehiculo))
                 {
-                    Console.WriteLine("No se pudo en el finito");
                     estacionamientoInfinito.EstacionarVehiculo(vehiculo);
                 }
-            }
-
-            foreach (Espacio espacio in estacionamientoFinito.Espacios)
-            {
-                if (espacio.Ocupado)
-                    estaFinito++;
-            }
-
-            foreach (Espacio espacio in estacionamientoInfinito.Espacios)
-            {
-                if (espacio.Ocupado)
-                    estaInfi++;
-            }
-
-            Console.WriteLine(estaFinito);
-            Console.WriteLine(estaInfi);
-            Console.WriteLine(estacionamientoFinito.Espacios.Count);
-            Console.WriteLine(estacionamientoInfinito.Espacios.Count);
-
+            }       
 
             Console.ReadLine();
         }

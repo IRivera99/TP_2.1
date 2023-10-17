@@ -43,7 +43,6 @@ namespace TP_2._1
 
         public bool EstacionarVehiculo(Vehiculo vehiculo)
         {
-            Console.WriteLine(Espacios.Count);
             bool hayLugar = true;
             bool estacionado = false;
             int i = 0;
@@ -51,40 +50,35 @@ namespace TP_2._1
             while (hayLugar)
             {
                 if (i == espacios.Count - 1)
-                {
                     hayLugar = AgregarEspacio(); //Mientras sea infinito el estacionamiento siempre va a haber lugar
-                }
 
                 if (!espacios[i].Ocupado && 
-                    (vehiculo.Dueño.TipoCliente == espacios[i].TipoCliente || vehiculo.Dueño.TipoCliente == TipoClientes.Regular) &&
+                    ((espacios[i].TipoCliente ==  vehiculo.Dueño.TipoCliente) || vehiculo.Dueño.TipoCliente == TipoClientes.Vip) &&
                     (((int)vehiculo.Tamaño) <= ((int)espacios[i].TipoDimension)))
                 {
-                    Console.WriteLine("Se cumple");
                     espacios[i].OcuparLugar(vehiculo);
                     estacionado = true;
                     hayLugar = false; //No significa que no haya mas lugar, sino que corta el while porque ya lo estacionó
                 }
+
                 i++;
-                //Console.WriteLine(i);
-                if(i == 10000000)
-                {
-                    hayLugar = false;
-                    Console.WriteLine("No se puede en el infinito (10000000 lugares)");
-                }
             }
+
             return estacionado;
         }
 
-        public bool AgregarEspacio()
+        private bool AgregarEspacio()
         {
             bool agregado = false;
             if (Infinito)
             {
-                Espacio espacio = new Espacio();
-                espacios.Add(espacio);
+                espacios.Add(new Espacio());
                 agregado = true;
             }
             return agregado;
         }
+
+
+
     }
 }
