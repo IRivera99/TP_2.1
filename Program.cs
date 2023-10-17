@@ -13,7 +13,6 @@ namespace TP_2._1
         {
             const int cantEspacios = 12;
             string opcion = "";
-            List<Vehiculo> vehiculos;
             Estacionamiento estacionamientoFinito;
             Estacionamiento estacionamientoInfinito;
             Random randy = new Random();
@@ -111,7 +110,7 @@ namespace TP_2._1
             {
                 estacionamientoFinito = new Estacionamiento(cantEspacios);
                 estacionamientoInfinito = new Estacionamiento();
-                vehiculos = new List<Vehiculo>();
+                List<Vehiculo> vehiculos = new List<Vehiculo>();
 
                 if (cantidad == 0)
                     cantidad = randy.Next(20, 60);
@@ -127,9 +126,31 @@ namespace TP_2._1
                 }
             }
 
+            List<Vehiculo> ObtenerListaVehiculos(bool listaParaOptimizar)
+            {
+                List<Vehiculo> vehiculos = new List<Vehiculo>();
+
+                foreach (Espacio espacio in estacionamientoFinito.Espacios)
+                {
+                    if (espacio.Ocupado && (!listaParaOptimizar || 
+                        (listaParaOptimizar && (int)espacio.TipoDimension != (int)espacio.Vehiculo.Tamaño)))
+                        vehiculos.Add(espacio.Vehiculo);                    
+                }
+
+                foreach (Espacio espacio in estacionamientoInfinito.Espacios)
+                {
+                    if (espacio.Ocupado && (!listaParaOptimizar ||
+                        (listaParaOptimizar && (int)espacio.TipoDimension != (int)espacio.Vehiculo.Tamaño)))
+                        vehiculos.Add(espacio.Vehiculo);
+                }
+
+                return vehiculos;
+            }
+
             void ListarVehiculos()
             {
                 Console.WriteLine("\nListado de vehículos:");
+                List<Vehiculo> vehiculos = ObtenerListaVehiculos(false);
                 foreach (Vehiculo vehiculo in vehiculos)
                 {
                     Console.WriteLine($"Dueño: {vehiculo.Dueño.Nombre} DNI:{vehiculo.Dueño.Dni}\n" +
@@ -143,7 +164,6 @@ namespace TP_2._1
             void AgregarVehículo()
             {
                 Vehiculo vehiculo = new Vehiculo();
-                vehiculos.Add(vehiculo);
                 EstacionarVehiculo(vehiculo, false);
             }
 
@@ -151,6 +171,7 @@ namespace TP_2._1
             {
                 bool eliminado = false;
                 Vehiculo vehiculoEliminar = null;
+                List<Vehiculo> vehiculos = ObtenerListaVehiculos(false);
                 int.TryParse(dato, out int dni);
 
                 foreach (Vehiculo vehiculo in vehiculos)
@@ -158,13 +179,8 @@ namespace TP_2._1
                     if (vehiculo.Dueño.Dni == dni || vehiculo.Matricula.Equals(dato))
                     {
                         vehiculoEliminar = vehiculo;
+                        eliminado = true;
                     }                        
-                }
-
-                if(vehiculoEliminar != null)
-                {
-                    vehiculos.Remove(vehiculoEliminar);
-                    eliminado = true;
                 }
 
                 if (eliminado && !estacionamientoFinito.EliminarVehiculoEstacionado(vehiculoEliminar))
@@ -176,11 +192,7 @@ namespace TP_2._1
             List<Vehiculo> EliminarVehiculos(int cantidad)
             {
                 List<Vehiculo> vehiculosAEliminar = new List<Vehiculo>();
-                List<Vehiculo> listaAuxiliar = new List<Vehiculo>();
-                foreach (Vehiculo vehiculo in vehiculos)
-                {
-                    listaAuxiliar.Add(vehiculo);
-                }
+                List<Vehiculo> vehiculos = ObtenerListaVehiculos(false);
 
                 if (cantidad > vehiculos.Count)
                 {
@@ -193,8 +205,8 @@ namespace TP_2._1
 
                 for (int i = 0; i < cantidad; i++)
                 {
-                    vehiculosAEliminar.Add(listaAuxiliar[randy.Next(0, listaAuxiliar.Count-1)]);
-                    listaAuxiliar.Remove(vehiculosAEliminar[i]);
+                    vehiculosAEliminar.Add(vehiculos[randy.Next(0, vehiculos.Count-1)]);
+                    vehiculos.Remove(vehiculosAEliminar[i]);
                 }
 
                 foreach (Vehiculo vehiculo in vehiculosAEliminar)
@@ -207,13 +219,16 @@ namespace TP_2._1
 
             void OptimizarEspacioEstacionamientos()
             {
-                foreach (Vehiculo vehiculo in vehiculos)
+                List<Vehiculo> vehiculosAOptimizar = ObtenerListaVehiculos(true);
+
+                foreach (Vehiculo vehiculo in vehiculosAOptimizar)
                 {
                     if (!estacionamientoFinito.EliminarVehiculoEstacionado(vehiculo))
                         estacionamientoInfinito.EliminarVehiculoEstacionado(vehiculo);
                 }
-                foreach (Vehiculo vehiculo in vehiculos)
-                {
+
+                foreach (Vehiculo vehiculo in vehiculosAOptimizar)
+                {               
                     EstacionarVehiculo(vehiculo, true);
                 }
             }
@@ -260,7 +275,8 @@ namespace TP_2._1
                         Console.WriteLine("Desocupado");
                     }
                     Console.WriteLine("------------------------------------------------------------------------------");
-                }*/
+                }
+            }*/
         }
     }
 }
