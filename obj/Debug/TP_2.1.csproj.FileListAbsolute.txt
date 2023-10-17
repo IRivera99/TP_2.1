@@ -1,0 +1,7 @@
+G:\Curso NEORIS\Proyectos\TP_2.1\bin\Debug\TP_2.1.exe.config
+G:\Curso NEORIS\Proyectos\TP_2.1\bin\Debug\TP_2.1.exe
+G:\Curso NEORIS\Proyectos\TP_2.1\bin\Debug\TP_2.1.pdb
+G:\Curso NEORIS\Proyectos\TP_2.1\obj\Debug\TP_2.1.csproj.AssemblyReference.cache
+G:\Curso NEORIS\Proyectos\TP_2.1\obj\Debug\TP_2.1.csproj.CoreCompileInputs.cache
+G:\Curso NEORIS\Proyectos\TP_2.1\obj\Debug\TP_2.1.exe
+G:\Curso NEORIS\Proyectos\TP_2.1\obj\Debug\TP_2.1.pdb
