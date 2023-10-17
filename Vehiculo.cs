@@ -20,19 +20,19 @@ namespace TP_2._1
         public Vehiculo()
         {
             Modelo = GenerarNombreAleatorio(5,0);
-            Dueño = new Persona();
+            Dueño = new Persona(GenerarNombreAleatorio(6, 0));
             Matricula = GenerarNombreAleatorio(3, 3);
             Ancho = randy.NextDouble() + randy.Next(0,3);
             Largo = randy.NextDouble() + randy.Next(0,5);
-            Tamaño = SetTipoDimensiones(Ancho, Largo);
+            Tamaño = SetTipoDimensiones(Ancho, Largo);            
         }
 
         private TipoDimensiones SetTipoDimensiones(double ancho, double largo)
         {
             TipoDimensiones tipoDimensiones = TipoDimensiones.Standar;
-            if (ancho < 4 && largo < 1.5)
+            if (largo < 4 && ancho < 1.5)
                 tipoDimensiones = TipoDimensiones.Mini;
-            if (ancho > 5 || largo > 2)
+            if (largo > 5 || ancho > 2)
                 tipoDimensiones = TipoDimensiones.Max;
             return tipoDimensiones;
         }

@@ -41,32 +41,6 @@ namespace TP_2._1
             }            
         }
 
-        public bool EstacionarVehiculo(Vehiculo vehiculo)
-        {
-            bool hayLugar = true;
-            bool estacionado = false;
-            int i = 0;
-
-            while (hayLugar)
-            {
-                if (i == espacios.Count - 1)
-                    hayLugar = AgregarEspacio(); //Mientras sea infinito el estacionamiento siempre va a haber lugar
-
-                if (!espacios[i].Ocupado && 
-                    ((espacios[i].TipoCliente ==  vehiculo.Dueño.TipoCliente) || vehiculo.Dueño.TipoCliente == TipoClientes.Vip) &&
-                    (((int)vehiculo.Tamaño) <= ((int)espacios[i].TipoDimension)))
-                {
-                    espacios[i].OcuparLugar(vehiculo);
-                    estacionado = true;
-                    hayLugar = false; //No significa que no haya mas lugar, sino que corta el while porque ya lo estacionó
-                }
-
-                i++;
-            }
-
-            return estacionado;
-        }
-
         private bool AgregarEspacio()
         {
             bool agregado = false;
@@ -78,7 +52,46 @@ namespace TP_2._1
             return agregado;
         }
 
+        public bool EstacionarVehiculo(Vehiculo vehiculo, bool optimizado)
+        {
+            bool hayLugar = true;
+            bool estacionado = false;
+            int i = 0;
 
+            while (hayLugar && !estacionado)
+            {
+                if (i == espacios.Count - 1)
+                    hayLugar = AgregarEspacio(); //Mientras sea infinito el estacionamiento siempre va a haber lugar
 
+                if (!espacios[i].Ocupado && 
+                    ((espacios[i].TipoCliente ==  vehiculo.Dueño.TipoCliente) || vehiculo.Dueño.TipoCliente == TipoClientes.Vip) &&
+                    ((!optimizado && (int)vehiculo.Tamaño <= (int)espacios[i].TipoDimension) || 
+                    (optimizado && (int)vehiculo.Tamaño == (int)espacios[i].TipoDimension)))
+                {
+                    espacios[i].OcuparLugar(vehiculo);
+                    estacionado = true;                    
+                }
+
+                i++;
+            }
+
+            return estacionado;
+        }       
+
+        public bool EliminarVehiculoEstacionado(Vehiculo vehiculo)
+        {
+            bool eliminado = false;
+
+            foreach (Espacio espacio in espacios)
+            {
+                if (espacio.Ocupado && espacio.Vehiculo.Equals(vehiculo))
+                {
+                    espacio.DesocuparLugar();
+                    eliminado = true;
+                }               
+            }
+
+            return eliminado;
+        }
     }
 }

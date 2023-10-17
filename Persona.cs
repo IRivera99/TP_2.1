@@ -26,6 +26,7 @@ namespace TP_2._1
         {
             Nombre = nombre;
             Dni = int.Parse(GenerarStringAleatorio(0, 8));
+            TipoCliente = DeterminarTipoCliente();
         }
 
         private TipoClientes DeterminarTipoCliente()

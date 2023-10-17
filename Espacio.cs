@@ -41,6 +41,12 @@ namespace TP_2._1
             }                
         }
 
+        public void DesocuparLugar()
+        {
+            ocupado = false;
+            vehiculo = null;
+        }
+
         private TipoDimensiones DeterminarTipoDimension()
         {
             int index = randy.Next(0, tipoDimensiones.Length);
