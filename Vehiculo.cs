@@ -10,21 +10,34 @@ namespace TP_2._1
     {
         public string Modelo { get; set; }
         public Persona Dueño { get; set; }
-        public string Matricula { get; }
+        public string Matricula { get; set; }
         public double Ancho { get; set; }
         public double Largo { get; set; }
         public TipoDimensiones Tamaño { get; }
 
         private static readonly Random randy = new Random();
 
-        public Vehiculo()
+        public Vehiculo(bool aleatorio)
         {
-            Modelo = GenerarNombreAleatorio(5,0);
-            Dueño = new Persona(GenerarNombreAleatorio(6, 0));
-            Matricula = GenerarNombreAleatorio(3, 3);
-            Ancho = randy.NextDouble() + randy.Next(0,3);
-            Largo = randy.NextDouble() + randy.Next(0,5);
-            Tamaño = SetTipoDimensiones(Ancho, Largo);            
+            if (aleatorio) 
+            {
+                Modelo = GenerarNombreAleatorio(5, 0);
+                Dueño = new Persona(GenerarNombreAleatorio(6, 0));
+                Matricula = GenerarNombreAleatorio(3, 3);
+                Ancho = randy.NextDouble() + randy.Next(0, 3);
+                Largo = randy.NextDouble() + randy.Next(0, 5);
+                Tamaño = SetTipoDimensiones(Ancho, Largo);
+            }
+            else
+            {
+                Modelo = string.Empty;
+                Dueño = new Persona(false);
+                Matricula = string.Empty;
+                Ancho = 0;
+                Largo = 0;
+                Tamaño = SetTipoDimensiones(Ancho, Largo);
+            }
+                        
         }
 
         private TipoDimensiones SetTipoDimensiones(double ancho, double largo)

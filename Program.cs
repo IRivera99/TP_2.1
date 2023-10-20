@@ -51,9 +51,12 @@ namespace TP_2._1
                     case "3":
                         {
                             Console.WriteLine("\nIngrese la matrícula del vehículo");
-                            string matricula = Console.ReadLine().ToUpper();
+                            Vehiculo vehiculo = new Vehiculo(false)
+                            {
+                                Matricula = Console.ReadLine().ToUpper()
+                            };
 
-                            if (EliminarVehiculo(matricula))
+                            if (EliminarVehiculo(vehiculo))
                                 Console.WriteLine("Vehiculo eliminado con éxito!");
                             else
                                 Console.WriteLine("Vehiculo no eliminado (puede que no exista)");
@@ -63,9 +66,17 @@ namespace TP_2._1
                     case "4":
                         {
                             Console.WriteLine("\nIngrese DNI del dueño del vehículo");
-                            string dni = Console.ReadLine();
+                            int.TryParse(Console.ReadLine(), out int dni);
 
-                            if (EliminarVehiculo(dni))
+                            Vehiculo vehiculo = new Vehiculo(false)
+                            {
+                                Dueño = new Persona(false)
+                                {
+                                    Dni = dni
+                                }
+                            };
+
+                            if (EliminarVehiculo(vehiculo))
                                 Console.WriteLine("Vehiculo eliminado con éxito!");
                             else
                                 Console.WriteLine("Vehiculo no eliminado (puede que no exista el dueño)");
@@ -75,10 +86,9 @@ namespace TP_2._1
                     case "5":
                         {
                             Console.WriteLine("\nIngrese la cantidad de vehículos a eliminar (enter para aleatorio)");
-                            int cantVehiculosEliminar;
-                            int.TryParse(Console.ReadLine(), out cantVehiculosEliminar);
+                            int.TryParse(Console.ReadLine(), out int cantVehiculosEliminar);
                             List<Vehiculo> vehiculosEliminados = EliminarVehiculos(cantVehiculosEliminar);
-                            Console.WriteLine($"\nSe eliminaron {vehiculosEliminados.Count} autos:");
+                            Console.WriteLine($"\nSe eliminaron {vehiculosEliminados.Count} vehiculos:");
                             foreach (Vehiculo vehiculo in vehiculosEliminados)
                             {
                                 Console.WriteLine($"Matricula: {vehiculo.Matricula}");
@@ -117,7 +127,7 @@ namespace TP_2._1
 
                 for (int i = 0; i < cantidad; i++)
                 {
-                    vehiculos.Add(new Vehiculo());
+                    vehiculos.Add(new Vehiculo(true));
                 }
 
                 foreach (Vehiculo vehiculo in vehiculos)
@@ -149,8 +159,9 @@ namespace TP_2._1
 
             void ListarVehiculos()
             {
-                Console.WriteLine("\nListado de vehículos:");
                 List<Vehiculo> vehiculos = ObtenerListaVehiculos(false);
+
+                Console.WriteLine("\nListado de vehículos:");                
                 foreach (Vehiculo vehiculo in vehiculos)
                 {
                     Console.WriteLine($"Dueño: {vehiculo.Dueño.Nombre} DNI:{vehiculo.Dueño.Dni}\n" +
@@ -163,28 +174,22 @@ namespace TP_2._1
 
             void AgregarVehículo()
             {
-                Vehiculo vehiculo = new Vehiculo();
+                Vehiculo vehiculo = new Vehiculo(true);
                 EstacionarVehiculo(vehiculo, false);
             }
 
-            bool EliminarVehiculo(string dato) 
+            bool EliminarVehiculo(Vehiculo vehiculoAEliminar) 
             {
                 bool eliminado = false;
-                Vehiculo vehiculoEliminar = null;
                 List<Vehiculo> vehiculos = ObtenerListaVehiculos(false);
-                int.TryParse(dato, out int dni);
 
-                foreach (Vehiculo vehiculo in vehiculos)
-                {
-                    if (vehiculo.Dueño.Dni == dni || vehiculo.Matricula.Equals(dato))
-                    {
-                        vehiculoEliminar = vehiculo;
-                        eliminado = true;
-                    }                        
-                }
+                if (!vehiculoAEliminar.Matricula.Equals(string.Empty) && vehiculoAEliminar != null)
+                    vehiculoAEliminar = vehiculos.Find(v => v.Matricula == vehiculoAEliminar.Matricula);
 
-                if (eliminado && !estacionamientoFinito.EliminarVehiculoEstacionado(vehiculoEliminar))
-                    estacionamientoInfinito.EliminarVehiculoEstacionado(vehiculoEliminar);
+                if (vehiculoAEliminar.Dueño.Dni != 0 && vehiculoAEliminar != null)
+                    vehiculoAEliminar = vehiculos.Find(v => v.Dueño.Dni == vehiculoAEliminar.Dueño.Dni);
+
+                eliminado = EliminarVehiculoEstacionado(vehiculoAEliminar);                   
 
                 return eliminado;
             }            
@@ -211,7 +216,7 @@ namespace TP_2._1
 
                 foreach (Vehiculo vehiculo in vehiculosAEliminar)
                 {
-                    EliminarVehiculo(vehiculo.Matricula);
+                    EliminarVehiculo(vehiculo);
                 }
 
                 return vehiculosAEliminar;
@@ -223,8 +228,7 @@ namespace TP_2._1
 
                 foreach (Vehiculo vehiculo in vehiculosAOptimizar)
                 {
-                    if (!estacionamientoFinito.EliminarVehiculoEstacionado(vehiculo))
-                        estacionamientoInfinito.EliminarVehiculoEstacionado(vehiculo);
+                    EliminarVehiculoEstacionado(vehiculo);
                 }
 
                 foreach (Vehiculo vehiculo in vehiculosAOptimizar)
@@ -233,12 +237,24 @@ namespace TP_2._1
                 }
             }
 
-            void EstacionarVehiculo(Vehiculo vehiculo, bool optimizado)
-            {                
-                if (!estacionamientoFinito.EstacionarVehiculo(vehiculo, optimizado))
-                {
-                    estacionamientoInfinito.EstacionarVehiculo(vehiculo, optimizado);
-                }
+            bool EstacionarVehiculo(Vehiculo vehiculo, bool optimizado)
+            {
+                bool estacionado = false;
+
+                if (estacionamientoFinito.EstacionarVehiculo(vehiculo, optimizado) || estacionamientoInfinito.EstacionarVehiculo(vehiculo, optimizado))
+                    estacionado = true;
+
+                return estacionado;
+            }
+
+            bool EliminarVehiculoEstacionado(Vehiculo vehiculo)
+            {
+                bool eliminado = false;
+
+                if (estacionamientoFinito.EliminarVehiculoEstacionado(vehiculo) || estacionamientoInfinito.EliminarVehiculoEstacionado(vehiculo))
+                    eliminado = true;
+
+                return eliminado;
             }
 
             /*void Debug()
